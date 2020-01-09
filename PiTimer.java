@@ -76,10 +76,16 @@ public class PiTimer {
 		else if (minutesRemaining == 1) {
 			out += minutesRemaining + " Minute;";
 		}
-		//remove last semicolon
-		out = out.substring(0, out.length() - 1);
-		//fix punctuation
-		out = out.replace(";", ", ");
+		if (out.isEmpty()) {
+			//handle reaching the target
+			out = "ALREADY STARTED";
+		}
+		else {
+			//remove last semicolon
+			out = out.substring(0, out.length() - 1);
+			//fix punctuation
+			out = out.replace(";", ", ");
+		}
 		return out;
 	}
 
