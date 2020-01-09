@@ -1,12 +1,18 @@
 import javax.swing.OverlayLayout;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-public class PiSlide extends JPanel {
+public class PiSlide extends JLayeredPane {
 
 	private static final long serialVersionUID = -4571154780609704749L;
+	private JLabel imageLabel;
 	private JLabel timerDisplay;
 	private PiTimer timer;
 	
@@ -16,13 +22,17 @@ public class PiSlide extends JPanel {
 	 * @param slideImage The image with the details for the event.
 	 */
 	public PiSlide(PiTimer targetTime, BufferedImage slideImage) {
-		setLayout(new OverlayLayout(this));
-		this.add(new JLabel(new ImageIcon(slideImage)));
+		setLayout(new BorderLayout());
+		imageLabel = new JLabel(new ImageIcon(slideImage));
+		imageLabel.setBounds(0, 0, slideImage.getWidth(), slideImage.getHeight());
+		this.add(imageLabel, BorderLayout.CENTER);
 		timer = targetTime;
 		timerDisplay = new JLabel(timer.getRemaining());
-		timerDisplay.setAlignmentX(BOTTOM_ALIGNMENT);
-		timerDisplay.setAlignmentY(CENTER_ALIGNMENT);
-		this.add(timerDisplay);
+		timerDisplay.setBackground(new Color(0, true));//.setOpaque(false);
+		timerDisplay.setFont(Font.decode("Calibri 72"));
+		timerDisplay.setAlignmentY(BOTTOM_ALIGNMENT);
+		timerDisplay.setAlignmentX(CENTER_ALIGNMENT);
+		this.add(timerDisplay, BorderLayout.SOUTH);
 	}
 	
 	/**
