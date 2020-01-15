@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-public class PiSlide extends JLayeredPane {
+public class PiSlide extends JPanel {
 
 	private static final long serialVersionUID = -4571154780609704749L;
 	private JLabel imageLabel;
@@ -42,5 +42,8 @@ public class PiSlide extends JLayeredPane {
 	public void update() {
 		timer.update();
 		timerDisplay.setText(timer.getRemaining());
+	}
+	public boolean targetReached() {
+		return timer.getRemaining().equals("ALREADY STARTED");
 	}
 }
