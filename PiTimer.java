@@ -10,10 +10,10 @@ public class PiTimer {
 	private final int targetHour;
 	private final int targetMinute;
 	
-	private int currentWeek;
-	private int currentDay;
-	private int currentHour;
-	private int currentMinute;
+	private int weeksRemaining;
+	private int daysRemaining;
+	private int hoursRemaining;
+	private int minutesRemaining;
 	
 	/**
 	 * Parameters represent the target time. Each will be modulated to the range specified below.
@@ -36,18 +36,41 @@ public class PiTimer {
 		Calendar cal = Calendar.getInstance();
 		int yearDay = cal.get(Calendar.DAY_OF_YEAR); // 1 based
 		int semesterDay = yearDay - START_DAY; // now 0 based
-		currentWeek = semesterDay / 7;
-		currentDay = semesterDay % 7;
-		currentHour = cal.get(Calendar.HOUR_OF_DAY);
-		currentMinute = cal.get(Calendar.MINUTE);
+		//days times hours/day times minutes/hour
+		int currentMinutes = semesterDay * 24 * 60;
+		//add hours times minutes/hour
+		currentMinutes += cal.get(Calendar.HOUR_OF_DAY) * 60;
+		//add the minutes themselves
+		currentMinutes += cal.get(Calendar.MINUTE);
+		
+		//days - 7 for each week, plus the specified days
+		int targetSemesterDay = (7 * targetWeek) + targetDay;
+		//hours - 24 for each day, plus the specified hours
+		int targetSemesterHours = (targetSemesterDay * 24) + targetHour;
+		//minutes - 60 for each hour, plus the specified minutes
+		int targetSemesterMinutes = (targetSemesterHours * 60) + targetMinute;
+		
+		int remainingSemesterMinutes = targetSemesterMinutes - currentMinutes;
+		//handles going past the target time
+		if (remainingSemesterMinutes < 0) {
+			weeksRemaining = -1;
+			daysRemaining = -1;
+			hoursRemaining = -1;
+			minutesRemaining = -1;
+			return;
+		}
+		//divide by minutes per week
+		weeksRemaining = remainingSemesterMinutes / (60 * 24 * 7);
+		//modulo out the weeks, divide by minutes per day
+		daysRemaining = (remainingSemesterMinutes % (60 * 24 * 7)) / (60 * 24);
+		//modulo out the days, divide by minutes per hour
+		hoursRemaining = (remainingSemesterMinutes % (60 * 24)) / (60);
+		//modulo out the hours
+		minutesRemaining = remainingSemesterMinutes % 60;
 	}
 	
 	public String getRemaining() {
 		String out = "";
-		int weeksRemaining = targetWeek - currentWeek;
-		int daysRemaining = targetDay - currentDay;
-		int hoursRemaining = targetHour - currentHour;
-		int minutesRemaining = targetMinute - currentMinute;
 		//weeks
 		if (weeksRemaining > 1) {
 			out += weeksRemaining + " Weeks;";  
