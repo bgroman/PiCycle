@@ -27,6 +27,7 @@ public class PiSlide extends JLayeredPane {
 		imageLabel.setBounds(0, 0, slideImage.getWidth(), slideImage.getHeight());
 		this.add(imageLabel, BorderLayout.CENTER);
 		timer = targetTime;
+		timer.update();
 		timerDisplay = new JLabel(timer.getRemaining());
 		timerDisplay.setBackground(new Color(0, true));//.setOpaque(false);
 		timerDisplay.setFont(Font.decode("Calibri 72"));
